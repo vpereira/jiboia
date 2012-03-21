@@ -1,3 +1,4 @@
 require './lib/jiboia'
 
-Jiboia.run
+arg = ARGV[0] rescue nil
+Jiboia.run(arg)

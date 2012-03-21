@@ -36,12 +36,17 @@ module Jiboia
       configatron.root_dir = File.expand_path(File.dirname("~/adyton/traces/foo"))
     end
     
-    def run
+    def run(specific_file = nil)
       EM.run do
-         pcap_queue = EM::Queue.new
-         Jiboia::Pcap.list_files.each { |f| pcap_queue.push f } 
+        pcap_queue = EM::Queue.new
+        
+        if specific_file.nil?
+          Jiboia::Pcap.list_files.each { |f| pcap_queue.push f } 
+        else
+         pcap_queue.push specific_file if File.exists? specific_file
+        end
   
-         worker_queue = Proc.new do |f|
+        worker_queue = Proc.new do |f|
           [:tcp,:udp,:others].each do |prot|
             process_pcap = Jiboia::Pcap.new(f,prot)
             puts process_pcap.inspect
@@ -63,7 +68,7 @@ module Jiboia
               }
             }
           end
-         end
+        end
         pcap_queue.pop(&worker_queue)
       end #EM Reactor Loop
     end
