@@ -9,6 +9,8 @@ require 'eventmachine'
 base = File.join(File.dirname(__FILE__),'jiboia')
 require File.join(base,'pcap_helper')
 require File.join(base,'pcap')
+require File.join(base,'dumpcap')
+
 
 module Jiboia
   #config
