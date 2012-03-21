@@ -16,7 +16,7 @@ module Jiboia
 
     def read_config
       begin
-        @yaml = YAML.load(File.read(File.join(File.dirname(__FILE__), '..','conf','paths.yaml')))
+        @yaml = YAML.load(File.read(File.join(File.dirname(__FILE__), '..','config','paths.yaml')))
         configatron.configure_from_hash(@yaml)
       rescue Exception => ex
         puts ex.message
