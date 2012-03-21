@@ -1,0 +1,21 @@
+GEM
+  specs:
+    configatron (2.9.0)
+      yamler (>= 0.1.0)
+    eventmachine (0.12.10)
+    metaclass (0.0.1)
+    minitest (2.11.4)
+    mocha (0.10.5)
+      metaclass (~> 0.0.1)
+    rake (0.9.2.2)
+    yamler (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  configatron
+  eventmachine
+  minitest
+  mocha
+  rake

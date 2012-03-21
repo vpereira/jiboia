@@ -1,0 +1,3 @@
+tshark: "/usr/bin/tshark"
+dumpcap: "/usr/bin/dumpcap"
+gzip: "/bin/gzip"
