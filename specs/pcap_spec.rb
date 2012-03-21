@@ -32,7 +32,10 @@ describe Pcap do
     @pcap.output_filename.must_match /foo_tcp.cap$/
   end
   it "should return a EM:Deferrable" do
-    skip "problem with EM"
-    @pcap.run.must_be_instance_of EM:Deferrable
+    #skip "problem with EM"
+    EM.run {          
+      @pcap.run.must_be_instance_of EM::DeferrableChildProcess
+      EM.stop
+    }
   end
 end

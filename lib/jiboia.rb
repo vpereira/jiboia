@@ -36,7 +36,7 @@ module Jiboia
       configatron.root_dir = File.expand_path(File.dirname("~/adyton/traces/foo"))
     end
     
-    def run(specific_file = nil)
+    def run(specific_file = nil,keep_file = true)
       EM.run do
         pcap_queue = EM::Queue.new
         
@@ -49,7 +49,6 @@ module Jiboia
         worker_queue = Proc.new do |f|
           [:tcp,:udp,:others].each do |prot|
             process_pcap = Jiboia::Pcap.new(f,prot)
-            puts process_pcap.inspect
             tshark_deferrable = process_pcap.run
   
             tshark_deferrable.errback {
@@ -58,6 +57,14 @@ module Jiboia
             tshark_deferrable.callback {
               EM.system("#{Jiboia.gzip} #{process_pcap.output_filename}")
             }
+            
+            unless keep_file
+              tshark.deferrable.callback {
+                EM.defer do
+                  FileUtils.rm_f process_pcap.file
+                end
+              }
+            end
         
             tshark_deferrable.callback {
               EM::next_tick {

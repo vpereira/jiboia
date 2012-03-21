@@ -7,4 +7,4 @@
 
 * process first stage (break a huge in file in 3 differents separated by protocol) DONE
 
-
+* Jiboia app should handle a basic CMDLINE 
