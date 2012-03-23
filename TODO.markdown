@@ -5,3 +5,4 @@
  - Process each file, breaking it in tcp/udp/others
  - remerge with merged pcap to have at end just one tcp, one udp and one others file
  - gzip it and prepare it to download
+ - refactor the method PcapHelper::list_files
