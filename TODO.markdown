@@ -1,10 +1,28 @@
+== Version 0.1 ==
 
-* read config from yaml DONE
+* Initial Commit
+* Dumpcap and Pcap classes basically implemented
 
-* parse many or one file DONE
+== Version 0.2 ==
 
-* schedule it direclty or using cron (using whenever)
+* read config from yaml
 
-* process first stage (break a huge in file in 3 differents separated by protocol) DONE
+== Version 0.3 ==
+
+* parse many or one file
+
+== Version 0.4 ==
+
+* process first stage (break a huge in file in 3 differents separated by protocol)
+
+== Version 0.5 ==
+
+* schedule it using whenever
+
+== Version 0.6 == 
+
+* WebServer to download processed files
+
+== Version 0.7 ==
 
 * Jiboia app should handle a basic CMDLINE 
