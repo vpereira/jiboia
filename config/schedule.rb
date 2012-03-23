@@ -11,6 +11,11 @@ every 1.day, :at=>'00:00' do
   command File.expand_path(File.join(File.dirname(__FILE__),"..","bin","dumpcap.rb"))
 end
 
+if @single_file_process
+  every 1.hour, :at=>'01:01' do
+    #here we call the Jiboia run saying it to parse the   
+  end
+end
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
 #   runner "MyModel.some_method"
