@@ -7,7 +7,7 @@ module Jiboia
       #define it as config options
       def run(args = {} )
         
-        args.merge(DEFAULT_VALUES)
+        args.merge!(DEFAULT_VALUES)
         
         if Process.uid != 0
           puts "You must be root"
