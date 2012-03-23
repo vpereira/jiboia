@@ -1,10 +1,14 @@
 module Jiboia
   class Dumpcap
+    
+    DEFAULT_VALUES = {:device=>"eth0",:fname=>"packets.cap"}
     class << self
       #TODO
       #define it as config options
-      def run(args = {:device=>"eth0",:fname=>"packets.cap"})
-              
+      def run(args = {} )
+        
+        args.merge(DEFAULT_VALUES)
+        
         if Process.uid != 0
           puts "You must be root"
           Process.exit false

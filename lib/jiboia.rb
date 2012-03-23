@@ -35,7 +35,7 @@ module Jiboia
     end
     def root_dir
       #add path as well to config
-      configatron.root_dir = File.expand_path(File.dirname("~/adyton/traces/foo"))
+      configatron.root_dir = File.expand_path(File.join(File.dirname(__FILE__),'..','traces'))
     end
     
     def run(specific_file = nil,keep_file = true)
