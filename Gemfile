@@ -7,3 +7,4 @@ gem 'minitest', :group=>:test
 gem 'mocha',:group=>:test
 gem 'whenever'
 gem 'goliath'
+gem 'active_support'

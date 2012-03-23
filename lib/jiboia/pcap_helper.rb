@@ -1,8 +1,22 @@
 module Jiboia
   module PcapHelper
     
+    def timestamp_to_directory(timestamp = Time.now)
+      timestamp.strftime("%Y%m%d")
+    end
+    #relative path to Jiboia::root_dir
+    def directory_exists?(timestamp)
+      File.exists? File.join(Jiboia::rot_dir,timestamp)
+    end
+  
+    #relative path to Jiboia::root_dir
+    #default extension = 'cap.gz'
+    def file_exists?(file,directory,ext = 'cap.gz')
+      File.exists? File.join(Jiboia::rot_dir,timestamp,file,ext)
+    end
+
     def get_or_create_dir(timestamp = Time.now)
-        dirname = File.join(Jiboia::root_dir,timestamp.strftime("%Y%m%d"))
+        dirname = File.join(Jiboia::root_dir,timestamp_to_directory)
         FileUtils.mkdir(dirname) unless File.exists? dirname
         dirname
     end
