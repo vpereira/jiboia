@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__),'..','jiboia')
 require 'json'
 require 'goliath/api'
 require 'goliath/runner'
+require 'i18n'
 require 'active_support'
 require 'active_support/hash_with_indifferent_access'
 

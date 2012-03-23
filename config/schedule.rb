@@ -7,6 +7,10 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
+every 1.day, :at=>'00:00' do
+  DumpPcap.run
+end
+
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
 #   runner "MyModel.some_method"

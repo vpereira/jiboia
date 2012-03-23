@@ -8,3 +8,4 @@ gem 'mocha',:group=>:test
 gem 'whenever'
 gem 'goliath'
 gem 'active_support'
+gem 'i18n'
