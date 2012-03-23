@@ -26,3 +26,7 @@
 == Version 0.7 ==
 
 * Jiboia app should handle a basic CMDLINE 
+
+== Version 0.8 ==
+
+* create a bin dir and pack all binaries there (dumpcap.run, scheduler.run and the jiboia.run)
