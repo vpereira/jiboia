@@ -13,6 +13,9 @@ require File.join(base,'pcap')
 require File.join(base,'dumpcap')
 require File.join(base,'scheduler')
 
+cwd = File.expand_path(File.dirname(__FILE__))
+
+$: << cwd
 
 module Jiboia
   #config
