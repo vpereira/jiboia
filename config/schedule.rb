@@ -8,7 +8,7 @@
 # set :output, "/path/to/my/cron_log.log"
 #
 every 1.day, :at=>'00:00' do
-  command File.expand_path(File.basedir(__FILE__),"..","bin","dumpcap.rb")
+  command File.expand_path(File.dirname(__FILE__),"..","bin","dumpcap.rb")
 end
 
 # every 2.hours do
