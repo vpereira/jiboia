@@ -12,7 +12,7 @@ def export_pcap(file)
     packet = Packet.parse(pkt)
 
     if pkt.is_ip?
-      packet_hash =  {ip_saddr:pkt.ip_saddr, ip_daddr: pkt.ip_daddr, ip_len: pkt.ip_len,pkt_size: pkt.size,protocols: pkt.proto,ip_proto: pkt.proto.last}
+      packet_hash =  {ip_saddr:pkt.ip_saddr, ip_daddr: pkt.ip_daddr, ip_len: pkt.ip_len,pkt_size: pkt.size,protocols: pkt.proto,ip_proto: pkt.proto.last, ip_id: pkt.ip_id}
 
       layer4_hash = case 
         when pkt.is_tcp?
@@ -26,7 +26,7 @@ def export_pcap(file)
       end
       packet_hash.merge! layer4_hash unless layer4_hash.nil? 
      end
-     puts packet_hash.to_json unless packet_hash.empty?
+     Thread.new { puts packet_hash.to_json unless packet_hash.empty? }.join
 	end
 end
 if File.readable?(infile = (ARGV[0] || 'in.pcap'))
