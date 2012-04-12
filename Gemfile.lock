@@ -34,6 +34,9 @@ GEM
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.1.0)
+    packetfu (1.1.5)
+    pcaprub (0.11.2)
+    progressbar (0.11.0)
     rack (1.4.1)
     rack-accept-media-types (0.9)
     rack-contrib (1.1.0)
@@ -59,5 +62,8 @@ DEPENDENCIES
   i18n
   minitest
   mocha
+  packetfu
+  pcaprub
+  progressbar
   rake
   whenever

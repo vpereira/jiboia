@@ -12,7 +12,7 @@ module Jiboia
     #relative path to Jiboia::root_dir
     #default extension = 'cap.gz'
     def file_exists?(file,directory,ext = 'cap.gz')
-      File.exists? File.join(Jiboia::rot_dir,timestamp,file,ext)
+      File.exists? File.join(Jiboia::root_dir,timestamp,file,ext)
     end
 
     def get_or_create_dir(timestamp = Time.now)
@@ -37,7 +37,7 @@ module Jiboia
         end
       end
       
-      puts dirname
+      puts dirname if Jiboia::debug == true
       
       filter_str = root_dir ? "*.cap" : "*.cap.gz" 
       #todo check if i can pass the match used below already here
