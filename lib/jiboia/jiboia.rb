@@ -24,6 +24,13 @@ module Jiboia
       #add path as well to config
       configatron.root_dir = File.expand_path(File.join(File.dirname(__FILE__),'..','..','traces'))
     end
+    def pre_defined_ports
+      {
+        :tcp=>[21,22,25,80,110,443,3306],
+        :udp=>[53,389,69,123],
+        :others=>[]
+      }
+    end
     def run(options = {})
       EM.run do
         keep_file = options[:keep_files]
@@ -39,6 +46,8 @@ module Jiboia
 
         worker_queue = Proc.new do |f|
           [:tcp,:udp,:others].each do |prot|
+            #we can check if does exist ports for this protocol. if yes, we pass to Pcap.new a third parameter port
+            #it is already implemented at Pcap.new. we must just change our algorithm here
             process_pcap = Jiboia::Pcap.new(f,prot)
             tshark_deferrable = process_pcap.run
 

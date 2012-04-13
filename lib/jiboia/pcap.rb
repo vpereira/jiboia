@@ -3,10 +3,11 @@ module Jiboia
     extend PcapHelper
     attr_reader :file,:dirname,:protocol
 
-    def initialize(file,protocol = 'tcp')
+    def initialize(file,protocol = 'tcp', port = 0)
       @file = file
       @protocol = protocol.to_sym
       @dirname = Pcap.get_or_create_dir
+      @port = port
     end
     #
     #it returns a EM::Deferrable
@@ -22,7 +23,7 @@ module Jiboia
     private
 
     def filter
-      case @protocol
+      local_f = case @protocol
         when :tcp
         "tcp"
         when :udp
@@ -30,6 +31,7 @@ module Jiboia
         when :others
           "not tcp and not udp"
       end
+      local_f += "and port #{@port}" unless @port == 0
     end
 
     def filename
