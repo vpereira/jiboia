@@ -27,7 +27,7 @@ module Jiboia
     def run(options = {})
       EM.run do
         keep_file = options[:keep_files]
-        specific_file = options[:with_file] || nil
+        specific_file = File.expand_path(options[:with_file]) || nil
         #TODO implement directory
         pcap_queue = EM::Queue.new
 
