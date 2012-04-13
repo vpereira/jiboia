@@ -24,9 +24,11 @@ module Jiboia
       #add path as well to config
       configatron.root_dir = File.expand_path(File.join(File.dirname(__FILE__),'..','..','traces'))
     end
-    def run(specific_file = nil,keep_file = true)
+    def run(options = {})
       EM.run do
-
+        keep_file = options[:keep_files]
+        specific_file = options[:with_file] || nil
+        #TODO implement directory
         pcap_queue = EM::Queue.new
 
         if specific_file.nil?
@@ -45,7 +47,7 @@ module Jiboia
             }
 
             tshark_deferrable.callback {
-              EM.system("#{Jiboia.gzip} #{process_pcap.output_filename}")
+              EM.system("#{Jiboia.gzip} #{process_pcap.output_filename}") if options[:zip_files_after] == true
             }
 
             unless keep_file
