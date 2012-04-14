@@ -28,7 +28,7 @@ module Jiboia
       {
         :tcp=>[21,22,25,80,110,443,3306],
         :udp=>[53,389,69,123],
-        :others=>[]
+        :others=>[0]
       }
     end
     def run(options = {})
@@ -43,38 +43,44 @@ module Jiboia
         else
          pcap_queue.push specific_file if File.exists? specific_file
         end
+        #Im running EM::Queue because it is a safeway to share a variable among deferrables
+        running_deferrables = EM::Queue.new
+
 
         worker_queue = Proc.new do |f|
-          [:tcp,:udp,:others].each do |prot|
-            #we can check if does exist ports for this protocol. if yes, we pass to Pcap.new a third parameter port
-            #it is already implemented at Pcap.new. we must just change our algorithm here
-            process_pcap = Jiboia::Pcap.new(f,prot)
-            tshark_deferrable = process_pcap.run
+          pre_defined_ports.keys.each do |prot|
+            pre_defined_ports[prot].each  do |pp|
+              #we can check if does exist ports for this protocol. if yes, we pass to Pcap.new a third parameter port
+              #it is already implemented at Pcap.new. we must just change our algorithm here
+              process_pcap = Jiboia::Pcap.new(f,prot,pp)
+              running_deferrables.push 1
+              tshark_deferrable = process_pcap.run
+              tshark_deferrable.errback {
+                puts "We couldnt process #{process_pcap.file}"
+              }
 
-            tshark_deferrable.errback {
-              puts "We couldnt process #{process_pcap.file}"
-            }
+              tshark_deferrable.callback {
+                running_deferrables.pop {} unless running_deferrables.empty?
+                EM.system("#{Jiboia.gzip} #{process_pcap.output_filename}") if options[:zip_files_after] == true
+              }
 
-            tshark_deferrable.callback {
-              EM.system("#{Jiboia.gzip} #{process_pcap.output_filename}") if options[:zip_files_after] == true
-            }
+              unless keep_file
+                tshark.deferrable.callback {
+                  EM.defer do
+                    FileUtils.rm_f process_pcap.file
+                  end
+                }
+              end
 
-            unless keep_file
-              tshark.deferrable.callback {
-                EM.defer do
-                  FileUtils.rm_f process_pcap.file
-                end
+              tshark_deferrable.callback {
+                EM::next_tick {
+                  #not accurate but it helps to avoid overload the system with many childs
+                  next if running_deferrables.size > 3
+                  EM.stop if pcap_queue.empty?
+                  pcap_queue.pop(&worker_queue)
+                }
               }
             end
-
-            tshark_deferrable.callback {
-              EM::next_tick {
-                #not accurate but it helps to avoid overload the system with many childs
-                next unless prot == :others
-                EM.stop if pcap_queue.empty?
-                pcap_queue.pop(&worker_queue)
-              }
-            }
           end
         end
         pcap_queue.pop(&worker_queue)

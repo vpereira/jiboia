@@ -12,12 +12,12 @@ module Jiboia
     #
     #it returns a EM::Deferrable
     def run
-      puts "i will process #{@protocol.to_s} with filter: #{filter}"
+      puts "i will process #{@protocol.to_s} with filter: #{filter} and save at #{output_filename}"
       tshark_deferrable = EM::DeferrableChildProcess.open("#{Jiboia::tshark} -r #{@file} -w #{output_filename} #{filter}")
     end
 
     def output_filename
-      "#{@dirname}/#{filename}_#{@protocol.to_s}.cap"
+      "#{@dirname}/#{filename}_#{filter_to_filename}.cap"
     end
 
     private
@@ -31,8 +31,12 @@ module Jiboia
         when :others
           "not tcp and not udp"
       end
-      local_f += " and port #{@port}" unless @port == 0
+      local_f += ".port == #{@port}" unless @port == 0
       local_f
+    end
+
+    def filter_to_filename
+      filter.gsub(/\./,'_').gsub(/\s+==\s+/,'_').gsub(/\s+/,'_')
     end
 
     def filename
