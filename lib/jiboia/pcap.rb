@@ -25,13 +25,14 @@ module Jiboia
     def filter
       local_f = case @protocol
         when :tcp
-        "tcp"
+          "tcp"
         when :udp
           "udp"
         when :others
           "not tcp and not udp"
       end
-      local_f += "and port #{@port}" unless @port == 0
+      local_f += " and port #{@port}" unless @port == 0
+      local_f
     end
 
     def filename

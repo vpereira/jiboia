@@ -34,4 +34,23 @@ describe Pcap do
       EM.stop
     }
   end
+
+  describe "filters" do
+    describe "protocol with port" do
+      before do
+        @pcap = Pcap.new('/foo.txt','tcp', 22)
+      end
+      it "should have a filter with protocol and port" do 
+        @pcap.send(:filter).must_match /tcp and port 22/
+      end
+    end
+    describe "protocol without port" do
+      before do
+        @pcap = Pcap.new('/foo.txt','udp')
+      end
+      it "should have a filter with protocol" do 
+        @pcap.send(:filter).must_match "udp" 
+      end
+    end
+  end
 end
