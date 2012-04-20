@@ -31,6 +31,14 @@ module Jiboia
         :others=>[0]
       }
     end
+
+    def split_protocols(f,&block)
+      pre_defined_ports.each do |prot,ports|
+        ports.each do |pp|
+          block.call Jiboia::Pcap.new(f,prot,pp) if block_given?
+        end
+      end
+    end
     def run(options = {})
       EM.run do
         keep_file = options[:keep_files]
@@ -48,12 +56,7 @@ module Jiboia
 
 
         worker_queue = Proc.new do |f|
-          pre_defined_ports.keys.each do |prot|
-            pre_defined_ports[prot].each  do |pp|
-              #we can check if does exist ports for this protocol. if yes, we pass to Pcap.new a third parameter port
-              #it is already implemented at Pcap.new. we must just change our algorithm here
-              process_pcap = Jiboia::Pcap.new(f,prot,pp)
-              running_deferrables.push 1
+          split_protocols(f) do |process_pcap|
               tshark_deferrable = process_pcap.run
               tshark_deferrable.errback {
                 puts "We couldnt process #{process_pcap.file}"
@@ -75,12 +78,12 @@ module Jiboia
               tshark_deferrable.callback {
                 EM::next_tick {
                   #not accurate but it helps to avoid overload the system with many childs
+                  puts running_deferrables.size
                   next if running_deferrables.size > 3
                   EM.stop if pcap_queue.empty?
                   pcap_queue.pop(&worker_queue)
                 }
               }
-            end
           end
         end
         pcap_queue.pop(&worker_queue)
